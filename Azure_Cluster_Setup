@@ -1,0 +1,33 @@
+DB Components:
+•	DataBricks Collaborative Workspace
+•	DB Runtime 
+•	DB Enterprise security
+
+DB Concepts:
+1.	Managed, scalable Apache Spark Servers 
+2.	Integrated tooling 
+3.	Optimised to run in Azure Clouds
+
+ DBAzure Integration:
+•	Fully managed Spark Clusters hosted on Azure
+•	DB Workspaces for collaboration, with notebooks
+•	Enterprise security, with Active directory Integration
+•	Integration with Azure Services (SQL DataWarehouse, Cosmos DB, Blob Storage, Power BI, and others
+Data Lake Storage, kafka, Hadoop storage
+
+
+Connection from R 
+need a cluster running Apache Spark 2.2+ and Scala 2.11 to use sparklyr in Databricks.
+
+Cluster can be created as per requirement of RAM, Core and Databricks Unit. Costing is as per Databricks unit per hour.
+
+
+
+
+
+
+
+
+
+
+
