@@ -1,0 +1,54 @@
+Installing sparklyr
+We will be installing the latest version of sparklyr from CRAN. This might take couple minutes because it downloads and installs +10 dependencies.
+
+You only need to do installation once on a cluster. After installation, all other notebooks attached to that cluster can import and use sparklyr.
+
+# Installing latest version of Rcpp
+install.packages("Rcpp") 
+
+if (!require("sparklyr")) {
+  install.packages("sparklyr")  
+}
+
+library(sparklyr)
+
+#Creating a sparklyr connection
+You can use "databricks" as the connection method in spark_connect() to establish a sparklyr connection. No additional parameters to spark_connect() are needed, nor calling spark_install() is needed because Spark is already installed on a Databricks cluster.
+Note that sc is a special name for sparklyr connection. Using that variable name you will see Spark progress bars and built-in Spark UI viewers.
+
+sc <- spark_connect(method = "databricks")
+
+Using sparklyr and dplyr API
+After setting up the sparklyr connection you can use all the sparklyr API. You can import and combine sparklyr with dplyr or MLlib. Note that if extension packages include third-party JARs you may need to install those JARs as libraries in your workspace.
+
+library(dplyr)
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+    
+iris_tbl <- copy_to(sc, iris)
+src_tbls(sc)
+iris_tbl %>% count
+
+# Changing default plot height 
+options(repr.plot.height = 600)
+
+iris_summary <- iris_tbl %>% 
+  mutate(Sepal_Width = ROUND(Sepal_Width * 2) / 2) %>% # Bucketizing Sepal_Width
+  group_by(Species, Sepal_Width) %>% 
+  summarize(count = n(), Sepal_Length = mean(Sepal_Length), stdev = sd(Sepal_Length)) %>% collect
+  
+library(ggplot2)
+
+ggplot(iris_summary, aes(Sepal_Width, Sepal_Length, color = Species)) + 
+  geom_line(size = 1.2) +
+  geom_errorbar(aes(ymin = Sepal_Length - stdev, ymax = Sepal_Length + stdev), width = 0.05) +
+  geom_text(aes(label = count), vjust = -0.2, hjust = 1.2, color = "black") +
+  theme(legend.position="top")
+
